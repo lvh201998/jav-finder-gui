@@ -4,7 +4,7 @@
       <a href="https://github.com/maisonsmd/jav-finder-gui">github</a>, 
       API từ anh
       <a
-        href="https://www.youtube.com/watch?v=18XFCWBseNc&feature=youtu.be"
+        href="https://www.youtube.com/channel/UCdV9tn79v3ecSDpC1AjVKaw"
         target="_blank"
       >Hoàng code dạo</a>
     </div>

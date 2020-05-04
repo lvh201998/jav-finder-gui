@@ -26,7 +26,6 @@ export default {
         // send up to parrent
       if (this.name.length > 0)
         this.$emit('find', this.name)
-      this.name = ''
     }
   }
 }

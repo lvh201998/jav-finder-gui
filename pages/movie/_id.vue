@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="m-2" style="min-width: 90vw;">
-      <h1 class="title mb-5">idol-finder</h1>
+      <h1 class="title mb-5">{{name}}</h1>
       <div class="row">
         <div class="col-12 col-sm-6 col-lg-3" v-bind:key="index" v-for="(movie, index) in result">
           <div class="card mt-2 mb-2">
@@ -10,7 +10,14 @@
               <h5 class="card-title">{{movie.name}}</h5>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">code: {{movie.code || '? '}}</li>
+              <li class="list-group-item">
+                code:
+                <a
+                  class="font-weight-bold"
+                  :href="`https://www.google.com/search?q=${movie.code}`"
+                  target="_blank"
+                >{{movie.code || '? '}}</a>
+              </li>
               <li class="list-group-item">review: {{movie.review.average || '? '}}</li>
             </ul>
           </div>
@@ -24,6 +31,15 @@
 import axios from 'axios'
 
 export default {
+  head() {
+    return {
+      title: this.name
+    }
+  },
+  created: function() {
+    this.name = this.$route.query.name
+    document.title = this.name
+  },
   async asyncData({ params, error }) {
     if (
       !confirm(

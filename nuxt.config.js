@@ -4,7 +4,8 @@ export default {
     mode: 'hash',
     base: '/',
     routeNameSplitter: '/',
-    mode: 'history'
+    mode: 'history',
+    
   },
   /*
    ** Headers of the page

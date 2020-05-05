@@ -24,21 +24,12 @@ export default {
     Card,
     Paginator
   },
-  props: ['data', 'itemPerPage'],
-  data() {
-    return {
-      page: {
-        current: 2,
-        count: 0
-      }
-    }
-  },
+  props: ['data', 'itemPerPage', 'page'],
   watch: {
     data: {
       immediate: true,
       handler(newVal, _) {
-        console.log(newVal)
-        this.page.count = Math.ceil((newVal.total || 0) / this.itemPerPage);
+        this.page.count = Math.ceil((newVal.total || 0) / this.itemPerPage)
         this.page.current = 1
       }
     }

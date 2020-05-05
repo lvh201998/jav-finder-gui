@@ -1,7 +1,7 @@
 <template>
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
-      <li class="page-item" v-bind:class="{'disabled': this.page.current==0}" @click="previousPage">
+      <li class="page-item" v-bind:class="{'disabled': this.page.current<=1}" @click="previousPage">
         <a class="page-link" href="#" tabindex="-1">trước</a>
       </li>
       <li>
@@ -39,14 +39,12 @@ export default {
   props: ['page'],
   data() {
     return {
-      currentPage: 0,
       pages: []
     }
   },
   created() {},
   methods: {
     changePage() {
-      console.log(this.page.current)
       this.$emit('changePage')
     },
     nextPage() {

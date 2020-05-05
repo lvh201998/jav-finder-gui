@@ -1,14 +1,4 @@
 <template>
-  <!-- <div class="row">
-    <div class="col-xs-12">
-      <div class="input-group input-group-lg">
-        <input type="text" class="form-control" />
-        <div class="input-group-btn">
-          <button type="submit" class="btn">Search</button>
-        </div>
-      </div>
-    </div>
-  </div>-->
   <div class="row">
     <div class="col-12 justify-content-between">
       <form @submit="find">

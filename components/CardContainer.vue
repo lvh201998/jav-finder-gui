@@ -1,12 +1,18 @@
 <template>
   <div class="d-flex flex-column">
+    <Paginator
+      class="d-flex flex-column m-3"
+      v-bind:page="page"
+      v-bind:class="{'invisible': this.page.count < 1}"
+      v-on:changePage="$emit('changePage', page)"
+    />
     <div class="row">
       <div class="col-12 col-sm-6 col-lg-3" v-bind:key="r.id" v-for="r in data.result">
         <Card v-bind:data="r" />
       </div>
     </div>
     <Paginator
-      class="d-flex flex-column"
+      class="d-flex flex-column m-3"
       v-bind:page="page"
       v-bind:class="{'invisible': this.page.count < 1}"
       v-on:changePage="$emit('changePage', page)"
@@ -24,16 +30,7 @@ export default {
     Card,
     Paginator
   },
-  props: ['data', 'itemPerPage', 'page'],
-  watch: {
-    data: {
-      immediate: true,
-      handler(newVal, _) {
-        this.page.count = Math.ceil((newVal.total || 0) / this.itemPerPage)
-        this.page.current = 1
-      }
-    }
-  }
+  props: ['data', 'itemPerPage', 'page']
 }
 </script>
 

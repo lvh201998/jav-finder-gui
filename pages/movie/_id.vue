@@ -66,7 +66,7 @@ export default {
         let code = element.siteUrl.substring(
           element.siteUrl.lastIndexOf('cid=') + 4
         )
-        code = code.substring(0, code.lastIndexOf('/')).toUpperCase()
+        element.code = code.substring(0, code.lastIndexOf('/')).toUpperCase()
         if (!element.review) element.review = { count: 0, average: '?' }
       })
       return response.data

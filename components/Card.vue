@@ -12,7 +12,10 @@
       >3 vòng: {{data.bust || '? '}}-{{data.waist || '? '}}-{{data.hip || '? '}}</li>
     </ul>
     <div class="card-body">
-      <a :href="data.siteUrl" target="_blank" class="card-link">Site link</a>
+      <a :href="data.siteUrl" target="_blank" class="card-link">
+        <NuxtLink :to="`/movie/${data.id}`">Tìm phim</NuxtLink>
+      </a>
+      <a :href="data.siteUrl" target="_blank" class="card-link">Info</a>
     </div>
   </div>
 </template>

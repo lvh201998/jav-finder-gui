@@ -1,5 +1,5 @@
 <template>
-  <h4 class="subtitle">Oh no! API không phản hồi</h4>
+  <h4 class="subtitle m-5">Oh no! API không phản hồi</h4>
 </template>
 
 <script>

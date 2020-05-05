@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="m-2" style="min-width: 90vw;">
+    <div class="m-2">
       <h1 class="title mb-5">{{name}}</h1>
       <div class="row">
         <div class="col-12 col-sm-6 col-lg-3" v-bind:key="index" v-for="(movie, index) in result">
@@ -54,7 +54,6 @@ export default {
         response = await axios.get(
           `https://jav-rest-api-htpvmrzjet.now.sh/api/videos/${params.id}`
         )
-
         // console.log(response.data)
       } catch (e) {
         error({
@@ -67,7 +66,7 @@ export default {
         let code = element.siteUrl.substring(
           element.siteUrl.lastIndexOf('cid=') + 4
         )
-        element.code = code.substring(0, code.lastIndexOf('/')).toUpperCase()
+        code = code.substring(0, code.lastIndexOf('/')).toUpperCase()
         if (!element.review) element.review = { count: 0, average: '?' }
       })
       return response.data

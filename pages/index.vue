@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="m-2" style="min-width: 90vw;">
+    <div class="m-2">
       <h1 class="title mb-5">idol-finder</h1>
       <Finder v-on:find="find" />
       <component

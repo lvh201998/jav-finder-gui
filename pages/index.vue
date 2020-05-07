@@ -40,7 +40,7 @@ export default {
       },
       currentComp: 'CardContainer',
       data: {},
-      itemPerPage: 24, //default
+      itemPerPage: 100, //default
       offset: 0,
       actressName: ''
     }
@@ -56,9 +56,10 @@ export default {
       this.currentComp = 'Loading'
 
       this.data = {}
+
       let url = `https://jav-rest-api-htpvmrzjet.now.sh/api/actress?name=${name}`
-      if (offset > 0) url += `&offset=${offset}`
       if (itemPerPage != 100) url += `&hits=${itemPerPage}`
+      if (offset > 0) url += `&offset=${offset}`
 
       console.log(url)
 

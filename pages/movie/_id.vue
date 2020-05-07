@@ -6,6 +6,9 @@
           <h2 class="title mb-4">{{name}} ({{data.total}})</h2>
         </NuxtLink>
 
+        <ErrorMessage v-if="error" />
+        <Loading v-if="loading" />
+        
         <Paginator
           class="d-flex flex-column m-3"
           v-bind:page="page"
@@ -22,7 +25,6 @@
             <div class="card mt-2 mb-2">
               <img
                 class="card-img-top"
-                style="filter: blur(10px);"
                 :src="movie.imageUrl"
                 alt="Card image cap"
               />
@@ -38,13 +40,18 @@
                     target="_blank"
                   >{{movie.code || '? '}}</a>
                 </li>
-                <li class="list-group-item">review: {{movie.review.average || '? '}}</li>
+                <li class="list-group-item">review: {{movie.review.average || '? '}} ({{movie.review.count || '? '}})</li>
+                <li class="list-group-item">date: {{movie.date || '? '}}</li>
+                <li class="list-group-item">maker: 
+                  <div v-for="(maker, index) in movie.maker" v-bind:key="index">{{maker.name}}, </div>
+                </li>
+                <!-- <li class="list-group-item">actress: 
+                  <div v-for="(actress, index) in movie.actress" v-bind:key="index">{{actress.name}}, </div>
+                </li> -->
               </ul>
             </div>
           </div>
         </div>
-        <ErrorMessage v-if="error" />
-        <Loading v-if="loading" />
         <Paginator
           class="d-flex flex-column m-3"
           v-bind:page="page"
@@ -92,7 +99,7 @@ export default {
         count: 0,
         current: 1
       },
-      itemPerPage: 24,
+      itemPerPage: 100,
       offset: 0,
       data: { count: 0, total: 0, result: [] },
       id: this.$route.params.id,
@@ -123,12 +130,13 @@ export default {
         this.showLoading()
       }, 500)
       this.error = false
-      console.log('fetching')
       let response = {}
+      let url = `https://jav-rest-api-htpvmrzjet.now.sh/api/videos/${actressId}?`
+      if (itemPerPage != 100) url += `hits=${itemPerPage}`
+      if (offset > 0) url += ` &offset=${offset}`
+      console.log(url)
       axios
-        .get(
-          `https://jav-rest-api-htpvmrzjet.now.sh/api/videos/${actressId}?hits=${itemPerPage}&offset=${offset}`
-        )
+        .get(url)
         .then(res => {
           this.hideLoading()
           response = res
@@ -162,5 +170,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

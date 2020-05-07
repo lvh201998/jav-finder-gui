@@ -1,4 +1,5 @@
 export default {
+
   mode: 'spa',
   router: {
     mode: 'hash',
@@ -26,7 +27,11 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: {
+    color: '#2DC68D',
+    height: '10px',
+    continuous: true
+  },
   /*
    ** Global CSS
    */

@@ -1,109 +1,166 @@
 <template>
   <div class="container">
     <div class="m-2">
-      <h1 class="title mb-5">{{name}}</h1>
-      <div class="row">
-        <div class="col-12 col-sm-6 col-lg-3" v-bind:key="index" v-for="(movie, index) in result">
-          <div class="card mt-2 mb-2">
-            <img class="card-img-top" :src="movie.imageUrl" alt="Card image cap" />
-            <div class="card-body pb-1">
-              <h5 class="card-title">{{movie.name}}</h5>
+      <div class="d-flex flex-column">
+        <NuxtLink to="/">
+          <h2 class="title mb-4">{{name}} ({{data.total}})</h2>
+        </NuxtLink>
+
+        <Paginator
+          class="d-flex flex-column m-3"
+          v-bind:page="page"
+          v-if="this.page.count >= 1"
+          v-on:changePage="changePage(page)"
+        />
+
+        <div class="row">
+          <div
+            class="col-12 col-sm-6 col-lg-3"
+            v-bind:key="index"
+            v-for="(movie, index) in data.result"
+          >
+            <div class="card mt-2 mb-2">
+              <img
+                class="card-img-top"
+                style="filter: blur(10px);"
+                :src="movie.imageUrl"
+                alt="Card image cap"
+              />
+              <div class="card-body pb-1">
+                <h5 class="card-title">{{movie.name}}</h5>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  code:
+                  <a
+                    class="font-weight-bold"
+                    :href="`https://www.google.com/search?q=${movie.code}`"
+                    target="_blank"
+                  >{{movie.code || '? '}}</a>
+                </li>
+                <li class="list-group-item">review: {{movie.review.average || '? '}}</li>
+              </ul>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                code:
-                <a
-                  class="font-weight-bold"
-                  :href="`https://www.google.com/search?q=${movie.code}`"
-                  target="_blank"
-                >{{movie.code || '? '}}</a>
-              </li>
-              <li class="list-group-item">review: {{movie.review.average || '? '}}</li>
-            </ul>
           </div>
         </div>
+        <ErrorMessage v-if="error" />
+        <Loading v-if="loading" />
+        <Paginator
+          class="d-flex flex-column m-3"
+          v-bind:page="page"
+          v-if="this.page.count >= 1"
+          v-on:changePage="changePage(page)"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Paginator from '~/components/Paginator'
+import Loading from '~/components/Loading'
+import ErrorMessage from '~/components/ErrorMessage'
 import axios from 'axios'
 
 export default {
+  loading: false,
+  components: {
+    Paginator,
+    Loading,
+    ErrorMessage
+  },
   head() {
     return {
       title: this.name
     }
   },
   created: function() {
-    this.name = this.$route.query.name
     document.title = this.name
+    // if (
+    //   !confirm(
+    //     'Trang web có chứa nội dung không lành mạnh, bạn có trên 18 tuổi?'
+    //   )
+    // ) {
+    //   document.location.href = '/'
+    // } else {
+    // }
+    this.fetch(this.id, this.itemPerPage, 0)
   },
-  async asyncData({ params, error }) {
-    if (
-      !confirm(
-        'Trang web có chứa nội dung không lành mạnh, bạn có trên 18 tuổi?'
+  data({ params }) {
+    return {
+      page: {
+        count: 0,
+        current: 1
+      },
+      itemPerPage: 24,
+      offset: 0,
+      data: { count: 0, total: 0, result: [] },
+      id: this.$route.params.id,
+      name: this.$route.query.name,
+      loading: true,
+      error: false
+    }
+  },
+  methods: {
+    showLoading() {
+      this.$nuxt.$loading.start()
+      this.loading = true
+    },
+    hideLoading() {
+      this.$nuxt.$loading.finish()
+      this.loading = false
+    },
+    changePage(page) {
+      console.log(page)
+      this.fetch(
+        this.id,
+        this.itemPerPage,
+        (page.current - 1) * this.itemPerPage
       )
-    ) {
-      document.location.href = '/'
-    } else {
-      console.log(params)
+    },
+    fetch(actressId, itemPerPage, offset) {
+      setTimeout(() => {
+        this.showLoading()
+      }, 500)
+      this.error = false
+      console.log('fetching')
       let response = {}
-      try {
-        response = await axios.get(
-          `https://jav-rest-api-htpvmrzjet.now.sh/api/videos/${params.id}`
+      axios
+        .get(
+          `https://jav-rest-api-htpvmrzjet.now.sh/api/videos/${actressId}?hits=${itemPerPage}&offset=${offset}`
         )
-        // console.log(response.data)
-      } catch (e) {
-        error({
-          message: `Lỗi API ${e.response.status}`,
-          statusCode: e.response.status
+        .then(res => {
+          this.hideLoading()
+          response = res
+
+          this.page.count = Math.ceil(
+            (response.data.total || 0) / this.itemPerPage
+          )
+          if (this.page.current > this.page.count)
+            this.page.current = this.page.count
+
+          response.data.result.forEach(element => {
+            element.imageUrl = element.imageUrl.replace('httpss', 'https')
+            let code = element.siteUrl.substring(
+              element.siteUrl.lastIndexOf('cid=') + 4
+            )
+            element.code = code
+              .substring(0, code.lastIndexOf('/'))
+              .toUpperCase()
+            if (!element.review) element.review = { count: 0, average: '?' }
+          })
+          this.data = response.data
         })
-      }
-      response.data.result.forEach(element => {
-        element.imageUrl = element.imageUrl.replace('httpss', 'https')
-        let code = element.siteUrl.substring(
-          element.siteUrl.lastIndexOf('cid=') + 4
-        )
-        element.code = code.substring(0, code.lastIndexOf('/')).toUpperCase()
-        if (!element.review) element.review = { count: 0, average: '?' }
-      })
-      return response.data
+        .catch(e => {
+          console.error(e)
+          this.error = true
+          this.hideLoading()
+        })
     }
   }
 }
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+<style scoped>
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>

@@ -62,9 +62,11 @@ export default {
 
       console.log(url)
 
+      this.$nuxt.$loading.start()
       axios
         .get(url)
         .then(res => {
+          this.$nuxt.$loading.finish()
           console.log(res.data)
           this.data = res.data
           this.currentComp = 'CardContainer'
@@ -74,6 +76,7 @@ export default {
             this.page.current = this.page.count
         })
         .catch(err => {
+          this.$nuxt.$loading.finish()
           console.error(err)
           this.data = {}
           this.currentComp = 'ErrorMessage'
@@ -112,8 +115,8 @@ export default {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
-  font-weight: 300;
-  font-size: 100px;
+  font-weight: 200;
+  font-size: 60px;
   color: #35495e;
   letter-spacing: 1px;
 }

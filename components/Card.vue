@@ -13,7 +13,7 @@
     </ul>
     <div class="card-body">
       <a :href="data.siteUrl" target="_blank" class="card-link">
-        <NuxtLink :to="{path: `/movie/${data.id}`, query: {name: data.name}}">Tìm phim</NuxtLink>
+        <NuxtLink :to="{path: `/movie/${data.id}`, query: {name: data.name}}" target="_blank">Tìm phim</NuxtLink>
       </a>
       <a :href="data.siteUrl" target="_blank" class="card-link">Info</a>
     </div>

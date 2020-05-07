@@ -7,7 +7,7 @@
       v-on:changePage="$emit('changePage', page)"
     />
     <div class="row">
-      <div class="col-12 col-sm-6 col-lg-3" v-bind:key="r.id" v-for="r in data.result">
+      <div class="col-12 col-sm-6 col-lg-3 col-xl-2" v-bind:key="r.id" v-for="r in data.result">
         <Card v-bind:data="r" />
       </div>
     </div>

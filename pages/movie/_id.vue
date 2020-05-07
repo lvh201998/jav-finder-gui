@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid m-lg-5 p-lg-5">
     <div class="m-2">
       <div class="d-flex flex-column">
         <NuxtLink to="/">
@@ -8,7 +8,7 @@
 
         <ErrorMessage v-if="error" />
         <Loading v-if="loading" />
-        
+
         <Paginator
           class="d-flex flex-column m-3"
           v-bind:page="page"
@@ -18,7 +18,7 @@
 
         <div class="row">
           <div
-            class="col-12 col-sm-6 col-lg-3"
+            class="col-12 col-sm-6 col-lg-3 col-xl-2"
             v-bind:key="index"
             v-for="(movie, index) in data.result"
           >
@@ -43,10 +43,10 @@
                 <li class="list-group-item">review: {{movie.review.average || '? '}} ({{movie.review.count || '? '}})</li>
                 <li class="list-group-item">date: {{movie.date || '? '}}</li>
                 <li class="list-group-item">maker: 
-                  <div v-for="(maker, index) in movie.maker" v-bind:key="index">{{maker.name}}, </div>
+                  <div v-for="(maker, index) in movie.maker" v-bind:key="index">{{maker.name}}<div v-if="index>0">, </div></div>
                 </li>
                 <!-- <li class="list-group-item">actress: 
-                  <div v-for="(actress, index) in movie.actress" v-bind:key="index">{{actress.name}}, </div>
+                  <div v-for="(actress, index) in movie.actress" v-bind:key="index">{{actress.name}}<div v-if="index>0">, </div></div>
                 </li> -->
               </ul>
             </div>
@@ -169,5 +169,5 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 </style>

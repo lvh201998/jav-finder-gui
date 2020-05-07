@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid m-lg-5 p-lg-5">
     <div class="m-2">
       <h1 class="title mb-5">idol-finder</h1>
       <Finder v-on:find="find" />
@@ -103,13 +103,13 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
+.container, .container-fluid {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: inherit;
 }
 
 .title {

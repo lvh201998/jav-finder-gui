@@ -1,9 +1,10 @@
 <template>
   <div class="row">
     <div class="col-12 justify-content-between">
-      <form @submit="find">
+      <form>
         <div class="input-group input-group-lg">
           <input
+            name="name"
             v-model="name"
             type="text"
             class="form-control"
@@ -21,18 +22,7 @@
 
 <script>
 export default {
-  data() {
-    return {
-      name: ''
-    }
-  },
-  methods: {
-    find(e) {
-      e.preventDefault()
-      // send up to parrent
-      if (this.name.length > 0) this.$emit('find', this.name)
-    }
-  }
+  props: ['name']
 }
 </script>
 

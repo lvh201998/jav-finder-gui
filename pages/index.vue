@@ -2,7 +2,7 @@
   <div class="container-fluid m-lg-5 p-lg-5">
     <div class="m-2">
       <h1 class="title mb-5">idol-finder</h1>
-      <Finder v-on:find="find" />
+      <Finder v-on:find="find" v-bind:name="actressName" />
       <component
         :is="currentComp"
         v-bind:data="data"
@@ -50,6 +50,15 @@ export default {
       title: 'idol finder'
     }
   },
+  created() {
+    const name = this.$route.query.name
+    if (!!name) {
+      this.actressName = name
+      setTimeout(() => {
+        this.find(name)
+      }, 100)
+    }
+  },
   methods: {
     fetch(name, itemPerPage, offset) {
       console.log({ name, itemPerPage, offset })
@@ -75,6 +84,7 @@ export default {
           this.page.count = Math.ceil((this.data.total || 0) / this.itemPerPage)
           if (this.page.current > this.page.count)
             this.page.current = this.page.count
+          document.title = `${this.actressName} (${this.data.total}) | idol finder`
         })
         .catch(err => {
           this.$nuxt.$loading.finish()
@@ -103,7 +113,8 @@ export default {
 </script>
 
 <style>
-.container, .container-fluid {
+.container,
+.container-fluid {
   min-height: 100vh;
   display: flex;
   justify-content: center;

@@ -3,7 +3,7 @@
     <div class="m-2">
       <div class="d-flex flex-column">
         <NuxtLink to="/">
-          <h2 class="title mb-4">{{name}} ({{data.total}})</h2>
+          <h2 class="title mb-4">{{name}}</h2>
         </NuxtLink>
 
         <ErrorMessage v-if="error" />
@@ -23,11 +23,7 @@
             v-for="(movie, index) in data.result"
           >
             <div class="card mt-2 mb-2">
-              <img
-                class="card-img-top"
-                :src="movie.imageUrl"
-                alt="Card image cap"
-              />
+              <img class="card-img-top" :src="movie.imageUrl" alt="Card image cap" />
               <div class="card-body pb-1">
                 <h5 class="card-title">{{movie.name}}</h5>
               </div>
@@ -40,14 +36,20 @@
                     target="_blank"
                   >{{movie.code || '? '}}</a>
                 </li>
-                <li class="list-group-item">review: {{movie.review.average || '? '}} ({{movie.review.count || '? '}})</li>
+                <li
+                  class="list-group-item"
+                >review: {{movie.review.average || '? '}} ({{movie.review.count || '? '}})</li>
                 <li class="list-group-item">date: {{movie.date || '? '}}</li>
-                <li class="list-group-item">maker: 
-                  <div v-for="(maker, index) in movie.maker" v-bind:key="index">{{maker.name}}<div v-if="index>0">, </div></div>
+                <li class="list-group-item">
+                  maker:
+                  <div v-for="(maker, index) in movie.maker" v-bind:key="index">
+                    {{maker.name}}
+                    <div v-if="index>0">,</div>
+                  </div>
                 </li>
                 <!-- <li class="list-group-item">actress: 
                   <div v-for="(actress, index) in movie.actress" v-bind:key="index">{{actress.name}}<div v-if="index>0">, </div></div>
-                </li> -->
+                </li>-->
               </ul>
             </div>
           </div>
@@ -81,19 +83,19 @@ export default {
       title: this.name
     }
   },
-  created: function() {
+  created() {
     document.title = this.name
-    // if (
-    //   !confirm(
-    //     'Trang web có chứa nội dung không lành mạnh, bạn có trên 18 tuổi?'
-    //   )
-    // ) {
-    //   document.location.href = '/'
-    // } else {
-    // }
+    if (
+      !confirm(
+        'Trang web có chứa nội dung không lành mạnh, bạn có trên 18 tuổi?'
+      )
+    ) {
+      document.location.href = '/'
+    } else {
+    }
     this.fetch(this.id, this.itemPerPage, 0)
   },
-  data({ params }) {
+  data() {
     return {
       page: {
         count: 0,
@@ -102,7 +104,7 @@ export default {
       itemPerPage: 100,
       offset: 0,
       data: { count: 0, total: 0, result: [] },
-      id: this.$route.params.id,
+      id: this.$route.query.id,
       name: this.$route.query.name,
       loading: true,
       error: false
@@ -158,6 +160,8 @@ export default {
             if (!element.review) element.review = { count: 0, average: '?' }
           })
           this.data = response.data
+
+          document.title = `${this.name} (${this.data.total})`
         })
         .catch(e => {
           console.error(e)
